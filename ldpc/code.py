@@ -42,7 +42,6 @@ def parity_check_matrix(n_code, d_v, d_c, seed=None):
     block_size = n_equations // d_v
 
     # Filling the first block with consecutive ones in each row of the block
-
     for i in range(block_size):
         for j in range(i * d_c, (i+1) * d_c):
             block[i, j] = 1
@@ -191,6 +190,8 @@ def make_ldpc(n_code, d_v, d_c, systematic=False, sparse=True, seed=None):
     seed: int, seed of the random generator.
     systematic: boolean, default False. if True, constructs a systematic
     coding matrix G.
+    sparse: boolean, default True. if True, scipy.sparse format is used to
+    speed up computation.
 
     Returns:
     --------
