@@ -37,7 +37,7 @@ print("Number of coded bits:", k)
 
 n_messages = np.arange(1, 20)
 n_runs = 50
-snr = 10
+snr = 9
 times_parallel = []
 times_sequential = []
 

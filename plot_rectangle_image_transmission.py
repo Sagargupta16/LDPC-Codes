@@ -1,5 +1,5 @@
 import numpy as np
-from ldpc import make_ldpc, ldpc_images
+from ldpc import code, ldpc_images
 from ldpc.utils_img import gray2bin, rgb2bin
 from matplotlib import pyplot as plt
 from PIL import Image
@@ -27,7 +27,7 @@ seed = 42
 # H and G. H is a regular parity-check matrix with d_v ones per row
 # and d_c ones per column
 
-H, G = make_ldpc(n, d_v, d_c, seed=seed, systematic=True, sparse=True)
+H, G = code.make_ldpc(n, d_v, d_c, seed=seed, systematic=True, sparse=True)
 
 ##################################################################
 # Now we simulate the transmission with Gaussian white noise
