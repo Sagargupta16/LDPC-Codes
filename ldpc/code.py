@@ -44,40 +44,6 @@ def parity_check_matrix(n, dv, dc, seed=None):
 
     return H.astype(int)
 
-def coding_matrix(H, sparse=True):
-    """
-    Compute the generating coding matrix G given the LDPC matrix H.
-
-    Parameters
-    ----------
-    H: array
-        Parity check matrix of an LDPC code.
-    sparse: bool, optional
-        If True, scipy.sparse format is used to speed up computation.
-
-    Returns
-    -------
-    G.T: array
-        Transposed coding matrix.
-    """
-    if type(H) == csr_matrix:
-        H = H.toarray()
-
-    # Apply Gaussian elimination
-    Href_colonnes, tQ = utils.gaussjordan(H.T, 1)
-    Href_diag = utils.gaussjordan(np.transpose(Href_colonnes))
-    Q = tQ.T
-    n_bits = H.shape[1] - Href_diag.sum()
-    Y = np.zeros(shape=(H.shape[1], n_bits)).astype(int)
-    Y[H.shape[1] - n_bits:, :] = np.identity(n_bits)
-
-    if sparse:
-        Q, Y = csr_matrix(Q), csr_matrix(Y)
-
-    tG = utils.binaryproduct(Q, Y)
-
-    return tG
-
 def coding_matrix_systematic(H, sparse=True):
     """
     Compute a coding matrix G in systematic format with an identity block.
@@ -140,7 +106,7 @@ def coding_matrix_systematic(H, sparse=True):
 
     return H_new, G_systematic.T
 
-def make_ldpc(n, dv, dc, systematic=False, sparse=True, seed=None):
+def make_ldpc(n, dv, dc, sparse=True, seed=None):
     """
     Create an LDPC coding and decoding matrices H and G.
 
@@ -168,8 +134,5 @@ def make_ldpc(n, dv, dc, systematic=False, sparse=True, seed=None):
     """
     seed = utils.check_random_state(seed)
     H = parity_check_matrix(n, dv, dc, seed=seed)
-    if systematic:
-        H, G = coding_matrix_systematic(H, sparse=sparse)
-    else:
-        G = coding_matrix(H, sparse=sparse)
+    H, G = coding_matrix_systematic(H, sparse=sparse)
     return H, G
